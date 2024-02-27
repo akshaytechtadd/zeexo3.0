@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    <link rel="preconnect dns-prefetch" href="https://cdn.shopify.com">
+    <link rel="preconnect dns-prefetch" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
+
+    {%- unless settings.header_font.system? and settings.body_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 128, height: 128 }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {%- render 'meta-tags' -%}
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
+    {%- render 'theme-font' -%}
+    {%- include 'style-resources' -%}
+    {%- include 'js-resources' -%}
+
+    {{content_for_header }}
+    
+    {%- if settings.enable_product_wishlist or settings.enable_product_compare -%}
+      {% include 'arn_wl_cp_settings' %}
+      {% include 'arn_wl_cp_styles' %}
+      {% include 'arn_icons_define' %}
+
+      {% if shop.metafields.arena.wl_cp_settings.general_settings.app_script == false %}
+        <script defer crossorigin="anonymous" src="{{ 'arn-wishlist-compare.js'  | asset_url }}"></script>
+      {% endif %}
+      {% if shop.metafields.arena.wl_cp_settings.value.general_settings.app_script == false %}
+        <script defer crossorigin="anonymous" src="{{ 'arn-wishlist-compare.js' | asset_url }}"></script>
+      {% endif %}
+    {% endif %}
+  </head>
+
+  {%- liquid
+    assign page_layout = settings.page_layout
+    if page_layout == 'wide'
+      assign layout_class = 'container-fluid'
+    else
+      assign layout_class = 'container'
+    endif
+
+    assign template_skins = settings.template_skins
+    assign heading_section_style = settings.heading_section_style
+    assign slider_controls_style = settings.slider_controls_style
+
+    assign mm_layout = settings.mm_layout
+    assign square_icons = settings.square_icons
+    assign position_icons = settings.position_icons
+
+    assign header_style = settings.header_style
+    if header_style == 6
+      assign header_sticky = false
+      assign header_overlay = false
+    else
+      assign header_sticky = settings.header_sticky
+      assign header_overlay = settings.header_overlay
+    endif
+
+    assign homepage_left_column = settings.homepage_left_column
+    if homepage_left_column and template == 'index'
+      assign left_column = true
+    endif
+  -%}
+
+  {%- capture global_class -%}heading-section-{{heading_section_style}} slider-control-{{slider_controls_style}}{%- endcapture -%}
+
+  {%- capture headerIcon -%}
+    {%- if square_icons %}square_icons {% endif -%}
+    position_icons-{{ position_icons -}}
+  {%- endcapture -%}
+
+  <body class="template-{{template.name}} skin-{{template_skins}} template-{{template.name}}--{{template.suffix | default: 'default'}} cart-type-{{ settings.cart_type }}{% if settings.catalog_mode %} catalog-mode{% endif %} header__style-{{header_style}} container_width-{{settings.container_width}}">
+
+    <div id="menu-hover-background"></div>
+
+    {%- if header_style == 6 -%}<div class="header-group" data-section-id="header-container" data-section-type="header">{%- sections 'header-group-6' -%}</div>{%- endif -%}
+
+    <div class="body-main-content {{ global_class | strip }}">
+      <div class="notification-bar-group">
+        {% sections 'notification-bar-group' %}
+      </div>
+
+      {%- unless header_style == 6 -%}
+        <div class="header-group{%- if header_overlay and template == 'index' %} header-overlay{% endif -%}">
+          <header class="header mm-layout-{{mm_layout}} {{headerIcon}}" id="header" data-sticky="{{header_sticky}}" data-section-id="header-container" data-section-type="header">
+ 
+            {%- capture header_section -%}
+              {%- case header_style -%}
+                {%- when 1 -%}
+                  {%- sections 'header-group-1' -%}
+                {%- when 2 -%}
+                  {%- sections 'header-group-2' -%}
+                {%- when 3 -%}
+                  {%- sections 'header-group-3' -%}
+                {%- when 4 -%}
+                  {%- sections 'header-group-4' -%}
+                {%- when 5 -%}
+                  {%- sections 'header-group-5' -%}
+                {%- when 7 -%}
+                  {%- sections 'header-group-7' -%}
+                {%- when 8 -%}
+                  {%- sections 'header-group-8' -%}
+                {%- when 9 -%}
+                  {%- sections 'header-group-9' -%}
+                {%- when 10 -%}
+                  {%- sections 'header-group-10' -%}
+                {%- when 11 -%}
+                  {%- sections 'header-group-11' -%}
+                {%- when 12 -%}
+                  {%- sections 'header-group-12' -%}
+                {%- when 13 -%}
+                  {%- sections 'header-group-13' -%}
+                {%- when 14 -%}
+                  {%- sections 'header-group-14' -%}
+                {%- when 15 -%}
+                  {%- sections 'header-group-15' -%}
+              {%- endcase -%}
+            {%- endcapture -%}
+
+            {{header_section}}
+          </header>
+        </div>
+      {%- endunless -%}
+
+      <script type="application/javascript">
+        function insertHeader(){
+          let deskTemplate = document.getElementById("desk-header-template");
+          if(!deskTemplate){
+            return;
+          }
+          if(window.innerWidth >= 992){
+            deskTemplate.insertAdjacentElement('beforebegin', deskTemplate.content.firstElementChild);
+            deskTemplate.remove();
+            document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
+          }else{
+            window.addEvent('resize', function(){
+              let div = document.createElement('div');
+              div.innerHTML = deskTemplate.innerHTML;
+              deskTemplate.insertAdjacentElement('beforebegin', div.firstElementChild);
+              deskTemplate.remove();
+              document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
+            }, {once: true});
+          }
+        }
+
+        insertHeader();
+        {%- if request.design_mode -%}
+          document.addEventListener('shopify:section:load', insertHeader);
+        {%- endif -%}
+      </script>
+
+      {%- capture mainContent -%}{{ content_for_layout }}{%- endcapture -%}
+      {%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, key: 'preload', firstSection: true, output: 'value' -%}
+      {%- if template contains 'product' and product.media.first != blank -%}
+        {%- render 'preload-hero-product-page' image: product.media.first, limit: 540 -%}
+      {%- endif -%}
+     
+      <main id="main-content"{%- if left_column %} class="{{layout_class}}"{% endif -%}>
+        {%- if left_column -%}
+          <div class="row check-left-column">
+            <div class="homepage-left-column col-lg-3 d-none d-lg-block">
+              {%- section 'homepage-left-column' -%}
+            </div>
+        {%- endif -%}
+
+        {%- if left_column -%}<div class="main-content-column col-lg-9 col-md-12">{%- endif -%}
+          {%- unless template == 'index' -%}{%- render 'breadcrumb' -%}{%- endunless -%}
+
+          {%- unless template == 'index' or template contains 'page' or template contains 'article' or template contains 'product' -%}<div class="{{ layout_class }}">{%- endunless -%}
+
+          {%- capture mainContent -%}{%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, key: 'preload', firstSection: false, output: '' -%}{%- endcapture -%}
+          {%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, firstSection: false, output: '' -%}
+
+          {%- unless template == 'index' or template contains 'page' or template contains 'article' or template contains 'product' -%}</div>{%- endunless -%}
+        {%- if left_column -%}</div></div>{%- endif -%}
+      </main>
+
+      {%- if settings.logo_list -%}{%- section 'section-logo-list' -%}{%- endif -%}
+      
+      {%- liquid
+        assign footer_left_column = settings.footer_left_column
+        assign footer_border_top = settings.footer_border_top
+      -%}
+
+      {%- capture border -%}
+        {%- if footer_border_top %} border-top{% endif -%}
+      {%- endcapture -%}
+
+      <footer class="footer{{border}}" data-direction="{{ settings.direction }}" data-section-id="{{ 'footer' | md5}}" data-section-type="footer">
+        {%- if footer_left_column -%}
+          <div class="{{layout_class}}">
+            <div class="row check-footer-lc">
+              <div class="col-md-3 col-sm-12 col-12 fix-pad">
+                {%- section 'footer-left-column' -%}
+              </div>
+        {%- endif -%}
+
+        {%- if footer_left_column -%}<div class="col-md-9 col-sm-12 col-12 fix-pad">{%- endif -%}
+          {% sections 'footer-group' %} 
+        {%- if footer_left_column -%}</div></div></div>{%- endif -%}
+      </footer>
+
+      {%- if settings.enable_single_banner -%}{%- section 'section-single-banner' -%}{%- endif -%}
+    </div>
+
+    <div>
+      {%- render 'popup' -%}
+      <button class="btn btn-1" id="back-to-top">{%- render 'svg', type: 'angle-up' -%}</button>
+    </div>
+
+  </body>
+</html>
